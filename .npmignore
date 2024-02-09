@@ -1,6 +1,8 @@
-src
-test
-node_modules
+/src
+/test
+/node_modules
+
 .gitignore
 .DS_Store
+.env
 tsconfig.json
