@@ -1,0 +1,54 @@
+{
+  "name": "lucia-adapter-surrealdb",
+  "version": "0.9.0",
+  "description": "Surrealdb adapter for Lucia",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "module": "index.js",
+  "type": "module",
+  "files": [
+    "**/*"
+  ],
+  "scripts": {
+    "test.surreal": "tsx tests/surrealdb2.ts",
+    "build": "rm -rf ./dist/* && cp ./package.json ./dist && cp ./README.md ./dist && cp .npmignore dist && tsc && esno package.ts",
+    "test-main": "esno test/index.ts",
+    "package": "pnpm build && cd dist && pnpm install --no-frozen-lockfile && pnpm publish --no-git-checks --access public --registry=https://registry.npmjs.com && cd ../",
+    "format": "prettier --plugin-search-dir . --write ."
+  },
+  "keywords": [
+    "lucia",
+    "auth",
+    "surrealdb",
+    "authentication",
+    "adapter"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pilcrowOnPaper/lucia"
+  },
+  "author": "var-che",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js"
+  },
+  "dependencies": {
+    "lucia": "3.x",
+    "surrealdb.js": "^0.11.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230518.0",
+    "@libsql/client": "^0.3.0",
+    "@lucia-auth/adapter-test": "^5.0.0",
+    "@miniflare/d1": "^2.14.0",
+    "@miniflare/web-sockets": "^2.14.1",
+    "@types/node": "^20.11.17",
+    "bun-types": "^1.0.12",
+    "dotenv": "^16.0.3",
+    "esno": "^4.0.0",
+    "shx": "^0.3.4",
+    "surrealdb.js": "^0.11.0",
+    "tsx": "^3.12.6",
+    "lucia": "3.x"
+  }
+}
