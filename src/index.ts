@@ -20,7 +20,7 @@ interface TableNames {
   user: string;
   session: string;
 }
-export class SurrqlAdapter implements Adapter {
+export class SurrealDBAdapter implements Adapter {
   private connector;
   private table_names: TableNames;
 
@@ -31,19 +31,19 @@ export class SurrqlAdapter implements Adapter {
 
   public async deleteSession(sessionId: string): Promise<void> {
     await this.connector.query(
-      `DELETE ${this.table_names.session}:${sessionId};`,
+      `DELETE ${this.table_names.session}:${sessionId};`
     );
   }
 
   public async deleteExpiredSessions(): Promise<void> {
     await this.connector.query(
-      `DELETE FROM ${this.table_names.session} WHERE expires_at <= time::now();`,
+      `DELETE FROM ${this.table_names.session} WHERE expires_at <= time::now();`
     );
   }
 
   public async deleteUserSessions(userId: string): Promise<void> {
     await this.connector.query(
-      `DELETE FROM ${this.table_names.session} WHERE user_id = "${userId}";`,
+      `DELETE FROM ${this.table_names.session} WHERE user_id = "${userId}";`
     );
   }
 
@@ -51,7 +51,7 @@ export class SurrqlAdapter implements Adapter {
     getSessionAndUser(): Returns the session and the user linked to the session
   */
   public async getSessionAndUser(
-    sessionId: string,
+    sessionId: string
   ): Promise<[session: DatabaseSession | null, user: DatabaseUser | null]> {
     let sesh = await this.getSession(sessionId);
 
@@ -67,10 +67,10 @@ export class SurrqlAdapter implements Adapter {
   }
 
   private async getUserFromSessionId(
-    userId: string,
+    userId: string
   ): Promise<DatabaseUser | null> {
     const result = await this.connector.query(
-      `SELECT * FROM ${this.table_names.user}:${userId};`,
+      `SELECT * FROM ${this.table_names.user}:${userId};`
     );
 
     if (!result[0][0]) return null;
@@ -79,7 +79,7 @@ export class SurrqlAdapter implements Adapter {
 
   private async getSession(sessionId: string): Promise<DatabaseSession | null> {
     const result = await this.connector.query(
-      `SELECT * FROM ${this.table_names.session}:${sessionId};`,
+      `SELECT * FROM ${this.table_names.session}:${sessionId};`
     );
 
     if (!result[0][0]) return null;
@@ -105,20 +105,20 @@ export class SurrqlAdapter implements Adapter {
 
     await this.connector.query(
       `INSERT INTO ${this.table_names.session} (${columns.join(
-        ", ",
-      )}) VALUES (${values.join(", ")});`,
+        ", "
+      )}) VALUES (${values.join(", ")});`
     );
 
     await this.connector.query(
       `UPDATE ${this.table_names.session}:${
         value.id
-      } SET expires_at = type::datetime("${databaseSession.expiresAt.toISOString()}")`,
+      } SET expires_at = type::datetime("${databaseSession.expiresAt.toISOString()}")`
     );
   }
 
   public async getUserSessions(userId: string): Promise<DatabaseSession[]> {
     const result = await this.connector.query(
-      `SELECT * FROM ${this.table_names.session} WHERE user_id = "${userId}";`,
+      `SELECT * FROM ${this.table_names.session} WHERE user_id = "${userId}";`
     );
 
     if (!result[0][0]) {
@@ -131,12 +131,12 @@ export class SurrqlAdapter implements Adapter {
 
   public async updateSessionExpiration(
     sessionId: string,
-    expiresAt: Date,
+    expiresAt: Date
   ): Promise<void> {
     await this.connector.query(
       `UPDATE ${
         this.table_names.session
-      }:${sessionId} SET expires_at = type::datetime("${expiresAt.toISOString()}");`,
+      }:${sessionId} SET expires_at = type::datetime("${expiresAt.toISOString()}");`
     );
   }
 }

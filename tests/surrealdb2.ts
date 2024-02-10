@@ -2,7 +2,7 @@ import { databaseUser, testAdapter } from "@lucia-auth/adapter-test";
 import dotenv from "dotenv";
 import { resolve } from "path";
 import { Surreal } from "surrealdb.js";
-import { SurrqlAdapter } from "../src/index";
+import { SurrealDBAdapter } from "../src/index";
 
 dotenv.config({ path: `${resolve()}/.env` });
 
@@ -32,10 +32,10 @@ async function main() {
     });
 
     await db.query(
-      `CREATE test_user:${databaseUser.id} SET username = "${databaseUser.attributes.username}";`,
+      `CREATE test_user:${databaseUser.id} SET username = "${databaseUser.attributes.username}";`
     );
 
-    const adapter = new SurrqlAdapter(db, {
+    const adapter = new SurrealDBAdapter(db, {
       user: "test_user",
       session: "test_session",
     });
